@@ -109,7 +109,7 @@ Cell[][] cell;
 		//8. check if each cell should live or die
 	for (int i = 0; i<cell.length;i++) {
 		for (int j = 0; j < cell[i].length; j++) {
-			cell[i][j]=liveOrDie(livingNeighbors[i][j]);
+			cell[i][j].liveOrDie(livingNeighbors[i][j]);
 		}
 	}
 		
@@ -122,8 +122,32 @@ Cell[][] cell;
 	//   It returns an int of 8 or less based on how many
 	//   living neighbors there are of the 
 	//   cell identified by x and y
+	int total=0;
 	public int getLivingNeighbors(int x, int y){
-		
+		if(x>0 && cell[x-1][y].isAlive) {
+			total++;
+		}
+		if(x>0 && y>0 && cell[x-1][y-1].isAlive) {
+			total++;
+		}
+		if(x>0 && y<cellsPerRow && cell[x-1][y+1].isAlive) {
+			 total++;
+		}
+		if(y>0 && cell[x][y-1].isAlive) {
+			total++;
+		}
+		if(y<cellsPerRow && cell[x][y+1].isAlive) {
+			total++;
+		}
+		if(x<cellsPerRow && y>0 && cell[x+1][y-1].isAlive) {
+			total++;
+		}
+		if (x<cellsPerRow && cell[x+1][y].isAlive) {
+			total++;
+		}
+		if(x<cellsPerRow && y<cellsPerRow && cell[x+1][y+1].isAlive) {
+			total++;
+		}
 		return 0;
 	}
 
@@ -150,6 +174,7 @@ Cell[][] cell;
 		//    which cell is clicked. Then toggle
 		//    the isAlive variable for that cell.
 		
+		cell[e.getX()/cellSize][e.getY()/cellSize].isAlive=!cell[e.getX()/cellSize][e.getY()/cellSize].isAlive;
 		
 		
 		
