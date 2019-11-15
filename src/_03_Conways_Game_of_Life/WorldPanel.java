@@ -92,6 +92,11 @@ Cell[][] cell;
 		
 		// draws grid
 		g.setColor(Color.BLACK);
+		for (int i = 0; i < cell.length; i++) {
+			for (int j = 0; j < cell[i].length; j++) {
+				g.drawRect(cell[i][j].getX(),cell[i][j].getY() ,cellSize ,cellSize );
+			}
+		}
 		g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
 	}
 	
@@ -122,33 +127,34 @@ Cell[][] cell;
 	//   It returns an int of 8 or less based on how many
 	//   living neighbors there are of the 
 	//   cell identified by x and y
-	int total=0;
+	
 	public int getLivingNeighbors(int x, int y){
+		int total=0;
 		if(x>0 && cell[x-1][y].isAlive) {
 			total++;
 		}
 		if(x>0 && y>0 && cell[x-1][y-1].isAlive) {
 			total++;
 		}
-		if(x>0 && y<cellsPerRow && cell[x-1][y+1].isAlive) {
+		if(x>0 && y<cellsPerRow-1 && cell[x-1][y+1].isAlive) {
 			 total++;
 		}
 		if(y>0 && cell[x][y-1].isAlive) {
 			total++;
 		}
-		if(y<cellsPerRow && cell[x][y+1].isAlive) {
+		if(y<cellsPerRow-1 && cell[x][y+1].isAlive) {
 			total++;
 		}
-		if(x<cellsPerRow && y>0 && cell[x+1][y-1].isAlive) {
+		if(x<cellsPerRow-1 && y>0 && cell[x+1][y-1].isAlive) {
 			total++;
 		}
-		if (x<cellsPerRow && cell[x+1][y].isAlive) {
+		if (x<cellsPerRow -1&& cell[x+1][y].isAlive) {
 			total++;
 		}
-		if(x<cellsPerRow && y<cellsPerRow && cell[x+1][y+1].isAlive) {
+		if(x<cellsPerRow-1 && y<cellsPerRow-1 && cell[x+1][y+1].isAlive) {
 			total++;
 		}
-		return 0;
+		return total;
 	}
 
 	@Override
