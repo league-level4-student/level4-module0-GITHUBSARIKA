@@ -25,6 +25,19 @@ public class MazeMaker {
 		int y = randGen.nextInt(height);
 		// 5. call selectNextPath method with the randomly selected cell
 		selectNextPath(maze.getCell(x, y));
+		boolean across=randGen.nextBoolean();
+		if(across==true) {
+			int a=randGen.nextInt(width);
+			int b=randGen.nextInt(width);
+			maze.getCell(a, 0).setNorthWall(false);
+			maze.getCell(b, height-1).setSouthWall(false);
+		}else {
+			int c=randGen.nextInt(height);
+			int d=randGen.nextInt(height);
+			maze.getCell(0, c).setWestWall(false);
+			maze.getCell(width-1, d).setEastWall(false);
+		}
+		
 
 		return maze;
 	}
@@ -32,7 +45,7 @@ public class MazeMaker {
 	// 6. Complete the selectNextPathMethod
 	private static void selectNextPath(Cell currentCell) {
 		// A. mark cell as visited
-		currentCell.hasBeenVisited();
+		currentCell.setBeenVisited(true);
 		// B. Get an ArrayList of unvisited neighbors using the current cell and the
 		// method below
 		ArrayList<Cell> cell = getUnvisitedNeighbors(currentCell);
@@ -59,8 +72,7 @@ public class MazeMaker {
 		// D. if all neighbors are visited
 		if (cell.size() == 0) {
 			if (!(uncheckedCells.size() == 0)) {
-				Cell x = uncheckedCells.pop();
-				currentCell = x;
+				currentCell = uncheckedCells.pop();
 				selectNextPath(currentCell);
 			}
 		}
@@ -80,15 +92,19 @@ public class MazeMaker {
 	private static void removeWalls(Cell c1, Cell c2) {
 		if (c1.getY() == c2.getY() && c1.getX() < c2.getX()) {
 			c1.setEastWall(false);
+			c2.setWestWall(false);
 		}
-		if (c1.getY() == c2.getY() && c1.getX() > c2.getX()) {
+		else if (c1.getY() == c2.getY() && c1.getX() > c2.getX()) {
 			c2.setEastWall(false);
+			c1.setWestWall(false);
 		}
-		if (c1.getX() == c2.getX() && c1.getY() < c2.getY()) {
-			c1.setNorthWall(false);
-		}
-		if (c1.getX() == c2.getX() && c1.getY() > c2.getY()) {
+		else if (c1.getX() == c2.getX() && c1.getY() < c2.getY()) {
+			c1.setSouthWall(false);
 			c2.setNorthWall(false);
+		}
+		else if (c1.getX() == c2.getX() && c1.getY() > c2.getY()) {
+			c2.setSouthWall(false);
+			c1.setNorthWall(false);
 		}
 	}
 
@@ -118,7 +134,7 @@ public class MazeMaker {
 		if (c.getY() > 0) {
 			Cell e = maze.getCell(c.getX(), c.getY() - 1);
 			if (!e.hasBeenVisited()) {
-
+                 cell.add(e);
 			}
 		}
 
