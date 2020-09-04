@@ -3,21 +3,40 @@ package _02_Pixel_Art;
 import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class PixelArtMaker implements MouseListener{
 	private JFrame window;
 	private GridInputPanel gip;
 	private GridPanel gp;
+	JButton saveButton;
 	ColorSelectionPanel csp;
+	private static void save(GridPanel gp) {
+		try(FileOutputStream fos=new FileOutputStream(new File(DATA_FILE)));
+				ObjectOutputStream oos=new ObjectOutputStream(fos)){
+			oos.writeObject(gp);
+		}catch(IOException e){
+			e.printStackTrace();
+			return null;
+		}catch(ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	
+	}
 	
 	public void start() {
 		gip = new GridInputPanel(this);	
 		window = new JFrame("Pixel Art");
 		window.setLayout(new FlowLayout());
 		window.setResizable(false);
-		
+		saveButton=new JButton();
+		window.add(saveButton);
 		window.add(gip);
 		window.pack();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
