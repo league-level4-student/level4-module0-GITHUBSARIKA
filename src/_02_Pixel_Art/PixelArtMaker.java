@@ -3,39 +3,60 @@ package _02_Pixel_Art;
 import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class PixelArtMaker implements MouseListener{
+public class PixelArtMaker implements MouseListener {
 	private JFrame window;
 	private GridInputPanel gip;
 	private GridPanel gp;
 	JButton saveButton;
 	ColorSelectionPanel csp;
+
 	private static void save(GridPanel gp) {
-		try(FileOutputStream fos=new FileOutputStream(new File(DATA_FILE)));
-				ObjectOutputStream oos=new ObjectOutputStream(fos)){
+		try {
+			FileOutputStream fos=new FileOutputStream(new File("Artwork"));
+			ObjectOutputStream oos=new ObjectOutputStream(fos);
 			oos.writeObject(gp);
+			oos.close();
 		}catch(IOException e){
 			e.printStackTrace();
-			return null;
-		}catch(ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
 		}
-	
+		
 	}
-	
+
+	private static GridPanel load() {
+			try{
+				FileInputStream fis=new FileInputStream(new File("Artwork"));
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				GridPanel g = (GridPanel) ois.readObject();
+				ois.close();
+				return g;
+			}catch(IOException e){
+				e.printStackTrace();
+				return null;
+			}catch(ClassNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			}
+				 
+			
+
+	}
+
 	public void start() {
-		gip = new GridInputPanel(this);	
+		gip = new GridInputPanel(this);
 		window = new JFrame("Pixel Art");
 		window.setLayout(new FlowLayout());
 		window.setResizable(false);
-		saveButton=new JButton();
+		saveButton = new JButton();
 		window.add(saveButton);
 		window.add(gip);
 		window.pack();
@@ -53,7 +74,7 @@ public class PixelArtMaker implements MouseListener{
 		gp.addMouseListener(this);
 		window.pack();
 	}
-	
+
 	public static void main(String[] args) {
 		new PixelArtMaker().start();
 	}
